@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dynamic Restaurant Website
 
-## Getting Started
+A database-powered restaurant website built using Next.js, TypeScript, Tailwind CSS, and NeonDB PostgreSQL.
 
-First, run the development server:
+## Features
+
+- Dynamic menu fetched from NeonDB.
+- Add new menu items.
+- Delete existing menu items.
+- Persistent database storage.
+- Responsive restaurant interface.
+- Real-time menu updates after operations.
+
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- NeonDB PostgreSQL
+- React Hooks (useState, useEffect)
+- Next.js API Route Handlers
+- Fetch API
+
+## Project Structure
+
+```text
+dynamic-restaurant-website/
+├── src/
+│   └── app/
+│       ├── api/
+│       │   └── menu/
+│       │       └── route.ts
+│       ├── page.tsx
+│       └── globals.css
+├── .env.local
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone YOUR_GITHUB_REPOSITORY_URL
+```
+
+2. Navigate into the project:
+
+```bash
+cd dynamic-restaurant-website
+```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Create a `.env.local` file in the root directory:
+
+```env
+DATABASE_URL="YOUR_NEON_DATABASE_URL"
+```
+
+5. Create the database table in NeonDB:
+
+```sql
+CREATE TABLE menu_items (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
+    description TEXT
+);
+```
+
+6. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+7. Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Database
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application uses NeonDB PostgreSQL to store restaurant menu items.
 
-## Learn More
+Table: `menu_items`
 
-To learn more about Next.js, take a look at the following resources:
+| Column | Type |
+|---|---|
+| id | SERIAL PRIMARY KEY |
+| name | VARCHAR(150) |
+| price | NUMERIC(10,2) |
+| description | TEXT |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Endpoints
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | /api/menu | Fetch menu items |
+| POST | /api/menu | Add menu item |
+| DELETE | /api/menu | Delete menu item |
 
-## Deploy on Vercel
+## Security
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The database connection string is stored in `.env.local` and must never be committed to GitHub.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Purpose
+
+This project demonstrates database integration, API route handling, React state management, and dynamic data operations using Next.js and NeonDB.
+
+## Author
+
+Developed as a practical Next.js + NeonDB assignment.
