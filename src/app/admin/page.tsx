@@ -426,42 +426,22 @@ export default function AdminPage() {
                     key={item.id}
                     className="overflow-hidden rounded-2xl border border-white/10 bg-[#1b1b1b] transition hover:border-orange-500/50"
                   >
-                    {foodImage?.image ? (
-                      <>
-                        <img
-                          src={foodImage.image}
-                          alt={item.name}
-                          className="h-52 w-full object-cover"
-                        />
+                  
 
-                        <div className="px-4 pt-2 text-xs text-gray-500">
-                          Photo by{" "}
-                          <a
-                            href={`${foodImage.photographerUrl}?utm_source=the_food_house&utm_medium=referral`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-orange-400 hover:underline"
-                          >
-                            {foodImage.photographer}
-                          </a>
-                          {" "}on{" "}
-                          <a
-                            href={`${foodImage.photoUrl}?utm_source=the_food_house&utm_medium=referral`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-orange-400 hover:underline"
-                          >
-                            Unsplash
-                          </a>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="flex h-52 items-center justify-center bg-[#252525] text-gray-500">
-                        {imageLoading[item.id]
-                          ? "Finding food image..."
-                          : "No matching image found"}
-                      </div>
-                    )}
+{foodImage?.image ? (
+  <img
+    src={foodImage.image}
+    alt={item.name}
+    className="h-52 w-full object-cover"
+  />
+) : (
+  <div className="flex h-52 items-center justify-center bg-[#252525] text-gray-500">
+    {imageLoading[item.id]
+      ? "Finding food image..."
+      : "No matching image found"}
+  </div>
+)}
+
 
                     <div className="p-5">
                       <h3 className="text-xl font-bold">{item.name}</h3>
