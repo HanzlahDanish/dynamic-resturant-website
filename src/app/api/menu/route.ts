@@ -1,19 +1,22 @@
 
 import { neon } from "@neondatabase/serverless";
+import { isAdminAuthenticated } from "@/lib/auth";
 
 const sql = neon(process.env.DATABASE_URL!);
 
-// GET: Fetch all menu items
+// GET: Public access — everyone can view the menu
 export async function GET() {
   try {
     const items = await sql`
-      SELECT * FROM menu_items
+      SELECT id, name, price, description
+      FROM menu_items
       ORDER BY id DESC
     `;
 
     return Response.json(items);
   } catch (error) {
     console.error("GET menu error:", error);
+
     return Response.json(
       { error: "Failed to fetch menu items" },
       { status: 500 }
@@ -21,9 +24,16 @@ export async function GET() {
   }
 }
 
-// POST: Add a new menu item
+// POST: Only authenticated admins can add menu items
 export async function POST(request: Request) {
   try {
+    if (!(await isAdminAuthenticated())) {
+      return Response.json(
+        { error: "Unauthorized. Admin login required." },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
 
     const name = String(body.name ?? "").trim();
@@ -40,12 +50,13 @@ export async function POST(request: Request) {
     const [newItem] = await sql`
       INSERT INTO menu_items (name, price, description)
       VALUES (${name}, ${price}, ${description})
-      RETURNING *
+      RETURNING id, name, price, description
     `;
 
     return Response.json(newItem, { status: 201 });
   } catch (error) {
     console.error("POST menu error:", error);
+
     return Response.json(
       { error: "Failed to add menu item" },
       { status: 500 }
@@ -53,9 +64,16 @@ export async function POST(request: Request) {
   }
 }
 
-// DELETE: Remove a menu item
+// DELETE: Only authenticated admins can delete menu items
 export async function DELETE(request: Request) {
   try {
+    if (!(await isAdminAuthenticated())) {
+      return Response.json(
+        { error: "Unauthorized. Admin login required." },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const id = Number(body.id);
 
@@ -79,9 +97,12 @@ export async function DELETE(request: Request) {
       );
     }
 
-    return Response.json({ message: "Menu item deleted successfully" });
+    return Response.json({
+      message: "Menu item deleted successfully",
+    });
   } catch (error) {
     console.error("DELETE menu error:", error);
+
     return Response.json(
       { error: "Failed to delete menu item" },
       { status: 500 }
